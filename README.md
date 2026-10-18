@@ -1,16 +1,63 @@
-# React + Vite
+# Event Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A simple React application for exploring Ticketmaster events and managing event registrations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- User registration, login and logout
+- Login session saved in local storage
+- Protected My Events page
+- Ticketmaster event listing and search
+- Event details
+- User-specific event registration
+- Duplicate registration prevention
+- Upcoming and completed events
+- Registration cancellation
 
-## React Compiler
+## Technologies
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React
+- Redux Toolkit
+- React Router
+- Ticketmaster Discovery API
+- Vite
 
-## Expanding the Oxlint configuration
+## Setup
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/mShaheer0/Event-Management-System.git
+   cd Event-Management-System
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Copy `.env.example` to a new file named `.env`.
+
+4. Add your Ticketmaster API key to `.env`:
+
+   ```env
+   VITE_TICKETMASTER_API_KEY=your_ticketmaster_api_key
+   ```
+
+5. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+Open the local URL shown in the terminal.
+
+## Other Commands
+
+```bash
+npm run build
+npm run lint
+```
+
+The `.env` file is ignored by Git and should not be uploaded to GitHub.
