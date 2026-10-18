@@ -1,12 +1,15 @@
+import { Link } from 'react-router-dom'
+
 function Header() {
   return (
     <header>
-      <h2>Evently</h2>
+      <h2><Link to="/">Evently</Link></h2>
 
       <nav>
-        <a href="/">Events</a>
-        <a href="/my-events">My Events</a>
-        <a href="/login">Login</a>
+        <Link to="/">Events</Link>
+        <Link to="/my-events">My Events</Link>
+        <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
       </nav>
     </header>
   )

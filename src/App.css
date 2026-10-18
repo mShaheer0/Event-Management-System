@@ -17,6 +17,11 @@ header h2 {
   margin: 0;
 }
 
+header h2 a {
+  color: white;
+  text-decoration: none;
+}
+
 nav {
   display: flex;
   gap: 20px;
@@ -37,6 +42,32 @@ footer {
   padding: 15px;
   background-color: #eeeeee;
   text-align: center;
+}
+
+.event-box {
+  max-width: 500px;
+  margin: 30px auto;
+  padding: 20px;
+  border: 1px solid #cccccc;
+}
+
+form {
+  max-width: 350px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+input {
+  padding: 8px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 9px;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
