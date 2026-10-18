@@ -6,15 +6,23 @@ const today = new Date().toISOString().split('T')[0]
 
 function MyEventsPage() {
   const currentUser = useSelector((state) => state.auth.currentUser)
-  const registrations = useSelector((state) => state.registrations.items)
+  const allRegistrations = useSelector((state) => state.registrations.items)
   const dispatch = useDispatch()
 
-  const myRegistrations = registrations.filter((item) => item.userId === currentUser.id)
-  const upcomingEvents = myRegistrations.filter((item) => item.date >= today)
-  const completedEvents = myRegistrations.filter((item) => item.date < today)
+  const myRegistrations = allRegistrations.filter(
+    (registration) => registration.userId === currentUser.id,
+  )
+  const upcomingEvents = myRegistrations.filter(
+    (registration) => registration.date >= today,
+  )
+  const completedEvents = myRegistrations.filter(
+    (registration) => registration.date < today,
+  )
 
   function cancelRegistration(registrationId) {
-    const updatedRegistrations = registrations.filter((item) => item.id !== registrationId)
+    const updatedRegistrations = allRegistrations.filter(
+      (registration) => registration.id !== registrationId,
+    )
     dispatch(removeRegistration(registrationId))
     localStorage.setItem('registrations', JSON.stringify(updatedRegistrations))
   }
@@ -23,20 +31,27 @@ function MyEventsPage() {
     <section>
       <h1>My Events</h1>
 
-      {myRegistrations.length === 0 && <p>You have not registered for any events yet.</p>}
+      {myRegistrations.length === 0 && (
+        <p>You have not registered for any events yet.</p>
+      )}
 
       {upcomingEvents.length > 0 && (
         <div className="my-events-section">
           <h2>Upcoming Events</h2>
-          {upcomingEvents.map((event) => (
-            <article className="my-event" key={event.id}>
-              {event.image && <img src={event.image} alt={event.name} />}
+          {upcomingEvents.map((registration) => (
+            <article className="my-event" key={registration.id}>
+              {registration.image && (
+                <img src={registration.image} alt={registration.name} />
+              )}
               <div>
-                <h3>{event.name}</h3>
-                <p>{event.date}</p>
-                <p>{event.venue}</p>
-                <Link to={`/events/${event.eventId}`}>View Details</Link>
-                <button type="button" onClick={() => cancelRegistration(event.id)}>
+                <h3>{registration.name}</h3>
+                <p>{registration.date}</p>
+                <p>{registration.venue}</p>
+                <Link to={`/events/${registration.eventId}`}>View Details</Link>
+                <button
+                  type="button"
+                  onClick={() => cancelRegistration(registration.id)}
+                >
                   Cancel Registration
                 </button>
               </div>
@@ -48,14 +63,16 @@ function MyEventsPage() {
       {completedEvents.length > 0 && (
         <div className="my-events-section">
           <h2>Completed Events</h2>
-          {completedEvents.map((event) => (
-            <article className="my-event" key={event.id}>
-              {event.image && <img src={event.image} alt={event.name} />}
+          {completedEvents.map((registration) => (
+            <article className="my-event" key={registration.id}>
+              {registration.image && (
+                <img src={registration.image} alt={registration.name} />
+              )}
               <div>
-                <h3>{event.name}</h3>
-                <p>{event.date}</p>
-                <p>{event.venue}</p>
-                <Link to={`/events/${event.eventId}`}>View Details</Link>
+                <h3>{registration.name}</h3>
+                <p>{registration.date}</p>
+                <p>{registration.venue}</p>
+                <Link to={`/events/${registration.eventId}`}>View Details</Link>
               </div>
             </article>
           ))}

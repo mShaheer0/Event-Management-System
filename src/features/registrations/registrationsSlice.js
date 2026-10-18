@@ -12,7 +12,9 @@ const registrationsSlice = createSlice({
       state.items.push(action.payload)
     },
     removeRegistration: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload)
+      state.items = state.items.filter(
+        (registration) => registration.id !== action.payload,
+      )
     },
   },
 })

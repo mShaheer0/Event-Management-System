@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { logout } from '../features/auth/authSlice.js'
 
 function Header() {
-  const currentUser = useSelector((state) => state.auth.currentUser)
+  const loggedInUser = useSelector((state) => state.auth.currentUser)
   const dispatch = useDispatch()
 
   function handleLogout() {
@@ -13,15 +13,19 @@ function Header() {
 
   return (
     <header>
-      <h2><Link to="/">Evently</Link></h2>
+      <h2>
+        <Link to="/">Evently</Link>
+      </h2>
 
       <nav>
         <Link to="/">Events</Link>
         <Link to="/my-events">My Events</Link>
-        {currentUser ? (
+        {loggedInUser ? (
           <>
-            <span>Hello, {currentUser.name}</span>
-            <button className="logout-button" onClick={handleLogout}>Logout</button>
+            <span>Hello, {loggedInUser.name}</span>
+            <button type="button" className="logout-button" onClick={handleLogout}>
+              Logout
+            </button>
           </>
         ) : (
           <>

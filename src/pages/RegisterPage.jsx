@@ -12,11 +12,11 @@ function RegisterPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  function handleSubmit(event) {
-    event.preventDefault()
+  function handleSubmit(formEvent) {
+    formEvent.preventDefault()
 
-    const cleanEmail = email.trim().toLowerCase()
-    const emailExists = users.some((user) => user.email === cleanEmail)
+    const normalizedEmail = email.trim().toLowerCase()
+    const emailExists = users.some((user) => user.email === normalizedEmail)
 
     if (emailExists) {
       setError('An account with this email already exists.')
@@ -26,7 +26,7 @@ function RegisterPage() {
     const newUser = {
       id: Date.now(),
       name: name.trim(),
-      email: cleanEmail,
+      email: normalizedEmail,
       password,
     }
 
@@ -41,17 +41,37 @@ function RegisterPage() {
       {error && <p className="error">{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name</label>
-        <input id="name" type="text" value={name} onChange={(event) => setName(event.target.value)} required />
+        <input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          required
+        />
 
         <label htmlFor="register-email">Email</label>
-        <input id="register-email" type="email" value={email} onChange={(event) => setEmail(event.target.value)} required />
+        <input
+          id="register-email"
+          type="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
 
         <label htmlFor="register-password">Password</label>
-        <input id="register-password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} required />
+        <input
+          id="register-password"
+          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          required
+        />
 
         <button type="submit">Register</button>
       </form>
-      <p>Already registered? <Link to="/login">Login here</Link></p>
+      <p>
+        Already registered? <Link to="/login">Login here</Link>
+      </p>
     </section>
   )
 }

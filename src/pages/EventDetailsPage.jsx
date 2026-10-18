@@ -7,7 +7,7 @@ import { addRegistration } from '../features/registrations/registrationsSlice.js
 function EventDetailsPage() {
   const { eventId } = useParams()
   const [message, setMessage] = useState('')
-  const { selectedEvent: event, detailsLoading, detailsError } = useSelector(
+  const { selectedEvent, detailsLoading, detailsError } = useSelector(
     (state) => state.events,
   )
   const currentUser = useSelector((state) => state.auth.currentUser)
@@ -20,10 +20,10 @@ function EventDetailsPage() {
 
   if (detailsLoading) return <p>Loading event details...</p>
   if (detailsError) return <p className="error">{detailsError}</p>
-  if (!event) return null
+  if (!selectedEvent) return null
 
-  const venue = event._embedded?.venues?.[0]
-  const category = event.classifications?.[0]?.segment?.name
+  const venue = selectedEvent._embedded?.venues?.[0]
+  const category = selectedEvent.classifications?.[0]?.segment?.name
   const coordinates = venue?.location
     ? `${venue.location.latitude},${venue.location.longitude}`
     : ''
@@ -35,7 +35,9 @@ function EventDetailsPage() {
     ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
     : ''
   const alreadyRegistered = registrations.some(
-    (item) => item.userId === currentUser?.id && item.eventId === event.id,
+    (registration) =>
+      registration.userId === currentUser?.id &&
+      registration.eventId === selectedEvent.id,
   )
 
   function handleRegistration() {
@@ -44,18 +46,19 @@ function EventDetailsPage() {
       return
     }
 
-    const registration = {
-      id: `${currentUser.id}-${event.id}`,
+    const newRegistration = {
+      id: `${currentUser.id}-${selectedEvent.id}`,
       userId: currentUser.id,
-      eventId: event.id,
-      name: event.name,
-      date: event.dates?.start?.localDate || '',
+      eventId: selectedEvent.id,
+      name: selectedEvent.name,
+      date: selectedEvent.dates?.start?.localDate || '',
       venue: venue?.name || '',
-      image: event.images?.[0]?.url || '',
+      image: selectedEvent.images?.[0]?.url || '',
     }
 
-    dispatch(addRegistration(registration))
-    localStorage.setItem('registrations', JSON.stringify([...registrations, registration]))
+    const updatedRegistrations = [...registrations, newRegistration]
+    dispatch(addRegistration(newRegistration))
+    localStorage.setItem('registrations', JSON.stringify(updatedRegistrations))
     setMessage('Registration successful.')
   }
 
@@ -63,27 +66,50 @@ function EventDetailsPage() {
     <section className="event-details">
       <Link to="/">Back to Events</Link>
 
-      {event.images?.[0] && <img src={event.images[0].url} alt={event.name} />}
+      {selectedEvent.images?.[0] && (
+        <img src={selectedEvent.images[0].url} alt={selectedEvent.name} />
+      )}
       <h1>Event Details</h1>
-      <h2>{event.name}</h2>
-      <p><strong>Date:</strong> {event.dates?.start?.localDate || 'Not available'}</p>
-      <p><strong>Time:</strong> {event.dates?.start?.localTime || 'Not available'}</p>
-      <p><strong>Venue:</strong> {venue?.name || 'Not available'}</p>
-      <p><strong>Location:</strong> {venue?.city?.name || 'Not available'}, {venue?.country?.name || 'Not available'}</p>
+      <h2>{selectedEvent.name}</h2>
+      <p>
+        <strong>Date:</strong>{' '}
+        {selectedEvent.dates?.start?.localDate || 'Not available'}
+      </p>
+      <p>
+        <strong>Time:</strong>{' '}
+        {selectedEvent.dates?.start?.localTime || 'Not available'}
+      </p>
+      <p>
+        <strong>Venue:</strong> {venue?.name || 'Not available'}
+      </p>
+      <p>
+        <strong>Location:</strong> {venue?.city?.name || 'Not available'},{' '}
+        {venue?.country?.name || 'Not available'}
+      </p>
       {mapUrl && (
         <p>
-          <a href={mapUrl} target="_blank" rel="noreferrer">Open Venue in Google Maps</a>
+          <a href={mapUrl} target="_blank" rel="noreferrer">
+            Open Venue in Google Maps
+          </a>
         </p>
       )}
-      <p><strong>Category:</strong> {category || 'Not available'}</p>
-      {event.info && <p><strong>Information:</strong> {event.info}</p>}
+      <p>
+        <strong>Category:</strong> {category || 'Not available'}
+      </p>
+      {selectedEvent.info && (
+        <p>
+          <strong>Information:</strong> {selectedEvent.info}
+        </p>
+      )}
 
       {currentUser ? (
         <button type="button" onClick={handleRegistration} disabled={alreadyRegistered}>
           {alreadyRegistered ? 'Already Registered' : 'Register for Event'}
         </button>
       ) : (
-        <p><Link to="/login">Login</Link> to register for this event.</p>
+        <p>
+          <Link to="/login">Login</Link> to register for this event.
+        </p>
       )}
 
       {message && <p className="success-message">{message}</p>}

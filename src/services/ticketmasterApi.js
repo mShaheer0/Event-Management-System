@@ -1,20 +1,20 @@
-const baseUrl = 'https://app.ticketmaster.com/discovery/v2'
+const API_URL = 'https://app.ticketmaster.com/discovery/v2'
 
 export async function getEvents(keyword = '', category = '') {
-  const params = new URLSearchParams({
+  const queryParams = new URLSearchParams({
     apikey: import.meta.env.VITE_TICKETMASTER_API_KEY,
     size: '20',
   })
 
   if (keyword) {
-    params.set('keyword', keyword)
+    queryParams.set('keyword', keyword)
   }
 
   if (category) {
-    params.set('classificationName', category)
+    queryParams.set('classificationName', category)
   }
 
-  const response = await fetch(`${baseUrl}/events.json?${params}`)
+  const response = await fetch(`${API_URL}/events.json?${queryParams}`)
 
   if (!response.ok) {
     throw new Error('Could not load events.')
@@ -26,7 +26,7 @@ export async function getEvents(keyword = '', category = '') {
 
 export async function getEventById(eventId) {
   const apiKey = import.meta.env.VITE_TICKETMASTER_API_KEY
-  const response = await fetch(`${baseUrl}/events/${eventId}.json?apikey=${apiKey}`)
+  const response = await fetch(`${API_URL}/events/${eventId}.json?apikey=${apiKey}`)
 
   if (!response.ok) {
     throw new Error('Could not load event details.')

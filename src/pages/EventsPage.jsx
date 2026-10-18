@@ -4,18 +4,23 @@ import { Link } from 'react-router-dom'
 import { fetchEvents } from '../features/events/eventsSlice.js'
 
 function EventsPage() {
-  const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('')
-  const { items, loading, error } = useSelector((state) => state.events)
+  const [searchTerm, setSearchTerm] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const { items: events, loading, error } = useSelector((state) => state.events)
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(fetchEvents())
   }, [dispatch])
 
-  function handleSearch(event) {
-    event.preventDefault()
-    dispatch(fetchEvents({ keyword: search.trim(), category }))
+  function handleSearch(formEvent) {
+    formEvent.preventDefault()
+    dispatch(
+      fetchEvents({
+        keyword: searchTerm.trim(),
+        category: selectedCategory,
+      }),
+    )
   }
 
   return (
@@ -29,14 +34,14 @@ function EventsPage() {
           <input
             id="event-search"
             type="search"
-            value={search}
-            onChange={(event) => setSearch(event.target.value)}
+            value={searchTerm}
+            onChange={(event) => setSearchTerm(event.target.value)}
             placeholder="Enter event name"
           />
           <select
             aria-label="Event category"
-            value={category}
-            onChange={(event) => setCategory(event.target.value)}
+            value={selectedCategory}
+            onChange={(event) => setSelectedCategory(event.target.value)}
           >
             <option value="">All Categories</option>
             <option value="Music">Music</option>
@@ -49,12 +54,16 @@ function EventsPage() {
 
       {loading && <p className="message">Loading events...</p>}
       {error && <p className="error">{error}</p>}
-      {!loading && !error && items.length === 0 && <p className="message">No events found.</p>}
+      {!loading && !error && events.length === 0 && (
+        <p className="message">No events found.</p>
+      )}
 
       <div className="events-list">
-        {items.map((event) => (
+        {events.map((event) => (
           <article className="event-card" key={event.id}>
-            {event.images?.[0] && <img src={event.images[0].url} alt={event.name} />}
+            {event.images?.[0] && (
+              <img src={event.images[0].url} alt={event.name} />
+            )}
             <div className="event-info">
               <h3>{event.name}</h3>
               <p>{event.dates?.start?.localDate || 'Date not available'}</p>
