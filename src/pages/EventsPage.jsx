@@ -1,9 +1,10 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { fetchEvents } from '../features/events/eventsSlice.js'
 
 function EventsPage() {
+  const [search, setSearch] = useState('')
   const { items, loading, error } = useSelector((state) => state.events)
   const dispatch = useDispatch()
 
@@ -11,10 +12,29 @@ function EventsPage() {
     dispatch(fetchEvents())
   }, [dispatch])
 
+  function handleSearch(event) {
+    event.preventDefault()
+    dispatch(fetchEvents(search.trim()))
+  }
+
   return (
     <section>
       <h1>Events</h1>
       <p>Discover and register for upcoming events.</p>
+
+      <form className="search-form" onSubmit={handleSearch}>
+        <label htmlFor="event-search">Search Events</label>
+        <div>
+          <input
+            id="event-search"
+            type="search"
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            placeholder="Enter event name"
+          />
+          <button type="submit">Search</button>
+        </div>
+      </form>
 
       {loading && <p className="message">Loading events...</p>}
       {error && <p className="error">{error}</p>}
