@@ -24,12 +24,18 @@ header h2 a {
 
 nav {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
 
 nav a {
   color: white;
   text-decoration: none;
+}
+
+.logout-button {
+  margin: 0;
+  padding: 5px 10px;
 }
 
 main {

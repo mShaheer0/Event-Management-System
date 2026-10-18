@@ -1,11 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const savedUsers = JSON.parse(localStorage.getItem('users')) || []
+const savedCurrentUser = JSON.parse(localStorage.getItem('currentUser')) || null
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    currentUser: null,
+    currentUser: savedCurrentUser,
     users: savedUsers,
   },
   reducers: {
