@@ -24,6 +24,16 @@ function EventDetailsPage() {
 
   const venue = event._embedded?.venues?.[0]
   const category = event.classifications?.[0]?.segment?.name
+  const coordinates = venue?.location
+    ? `${venue.location.latitude},${venue.location.longitude}`
+    : ''
+  const address = [venue?.name, venue?.address?.line1, venue?.city?.name]
+    .filter(Boolean)
+    .join(', ')
+  const mapQuery = coordinates || address
+  const mapUrl = mapQuery
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapQuery)}`
+    : ''
   const alreadyRegistered = registrations.some(
     (item) => item.userId === currentUser?.id && item.eventId === event.id,
   )
@@ -60,6 +70,11 @@ function EventDetailsPage() {
       <p><strong>Time:</strong> {event.dates?.start?.localTime || 'Not available'}</p>
       <p><strong>Venue:</strong> {venue?.name || 'Not available'}</p>
       <p><strong>Location:</strong> {venue?.city?.name || 'Not available'}, {venue?.country?.name || 'Not available'}</p>
+      {mapUrl && (
+        <p>
+          <a href={mapUrl} target="_blank" rel="noreferrer">Open Venue in Google Maps</a>
+        </p>
+      )}
       <p><strong>Category:</strong> {category || 'Not available'}</p>
       {event.info && <p><strong>Information:</strong> {event.info}</p>}
 
