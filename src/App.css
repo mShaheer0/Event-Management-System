@@ -98,6 +98,19 @@ footer {
   margin-top: 0;
 }
 
+.event-details {
+  max-width: 800px;
+  margin: auto;
+  text-align: left;
+}
+
+.event-details img {
+  width: 100%;
+  max-height: 400px;
+  margin-top: 20px;
+  object-fit: cover;
+}
+
 form {
   max-width: 350px;
   margin: 20px auto;

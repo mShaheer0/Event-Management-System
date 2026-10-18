@@ -19,3 +19,14 @@ export async function getEvents(keyword = '') {
   const data = await response.json()
   return data._embedded?.events || []
 }
+
+export async function getEventById(eventId) {
+  const apiKey = import.meta.env.VITE_TICKETMASTER_API_KEY
+  const response = await fetch(`${baseUrl}/events/${eventId}.json?apikey=${apiKey}`)
+
+  if (!response.ok) {
+    throw new Error('Could not load event details.')
+  }
+
+  return response.json()
+}
