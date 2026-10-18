@@ -3,7 +3,7 @@ import { getEventById, getEvents } from '../../services/ticketmasterApi.js'
 
 export const fetchEvents = createAsyncThunk(
   'events/fetchEvents',
-  async (keyword = '') => getEvents(keyword),
+  async ({ keyword = '', category = '' } = {}) => getEvents(keyword, category),
 )
 
 export const fetchEventDetails = createAsyncThunk(

@@ -7,7 +7,7 @@ A simple React application for exploring Ticketmaster events and managing event 
 - User registration, login and logout
 - Login session saved in local storage
 - Protected My Events page
-- Ticketmaster event listing and search
+- Ticketmaster event listing, search and category filtering
 - Event details
 - User-specific event registration
 - Duplicate registration prevention

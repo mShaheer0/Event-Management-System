@@ -5,6 +5,7 @@ import { fetchEvents } from '../features/events/eventsSlice.js'
 
 function EventsPage() {
   const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('')
   const { items, loading, error } = useSelector((state) => state.events)
   const dispatch = useDispatch()
 
@@ -14,7 +15,7 @@ function EventsPage() {
 
   function handleSearch(event) {
     event.preventDefault()
-    dispatch(fetchEvents(search.trim()))
+    dispatch(fetchEvents({ keyword: search.trim(), category }))
   }
 
   return (
@@ -32,6 +33,16 @@ function EventsPage() {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Enter event name"
           />
+          <select
+            aria-label="Event category"
+            value={category}
+            onChange={(event) => setCategory(event.target.value)}
+          >
+            <option value="">All Categories</option>
+            <option value="Music">Music</option>
+            <option value="Sports">Sports</option>
+            <option value="Arts & Theatre">Arts & Theatre</option>
+          </select>
           <button type="submit">Search</button>
         </div>
       </form>

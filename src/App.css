@@ -90,8 +90,10 @@ footer {
   gap: 10px;
 }
 
-.search-form input {
+.search-form input,
+.search-form select {
   flex: 1;
+  padding: 8px;
 }
 
 .search-form button {
@@ -174,6 +176,10 @@ button {
 
   .events-list {
     grid-template-columns: 1fr;
+  }
+
+  .search-form div {
+    flex-direction: column;
   }
 
   .my-event {

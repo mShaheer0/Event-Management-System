@@ -1,6 +1,6 @@
 const baseUrl = 'https://app.ticketmaster.com/discovery/v2'
 
-export async function getEvents(keyword = '') {
+export async function getEvents(keyword = '', category = '') {
   const params = new URLSearchParams({
     apikey: import.meta.env.VITE_TICKETMASTER_API_KEY,
     size: '20',
@@ -8,6 +8,10 @@ export async function getEvents(keyword = '') {
 
   if (keyword) {
     params.set('keyword', keyword)
+  }
+
+  if (category) {
+    params.set('classificationName', category)
   }
 
   const response = await fetch(`${baseUrl}/events.json?${params}`)
