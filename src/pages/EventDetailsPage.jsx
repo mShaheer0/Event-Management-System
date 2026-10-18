@@ -1,13 +1,17 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { fetchEventDetails } from '../features/events/eventsSlice.js'
+import { addRegistration } from '../features/registrations/registrationsSlice.js'
 
 function EventDetailsPage() {
   const { eventId } = useParams()
+  const [message, setMessage] = useState('')
   const { selectedEvent: event, detailsLoading, detailsError } = useSelector(
     (state) => state.events,
   )
+  const currentUser = useSelector((state) => state.auth.currentUser)
+  const registrations = useSelector((state) => state.registrations.items)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -20,6 +24,30 @@ function EventDetailsPage() {
 
   const venue = event._embedded?.venues?.[0]
   const category = event.classifications?.[0]?.segment?.name
+  const alreadyRegistered = registrations.some(
+    (item) => item.userId === currentUser?.id && item.eventId === event.id,
+  )
+
+  function handleRegistration() {
+    if (alreadyRegistered) {
+      setMessage('You are already registered for this event.')
+      return
+    }
+
+    const registration = {
+      id: `${currentUser.id}-${event.id}`,
+      userId: currentUser.id,
+      eventId: event.id,
+      name: event.name,
+      date: event.dates?.start?.localDate || '',
+      venue: venue?.name || '',
+      image: event.images?.[0]?.url || '',
+    }
+
+    dispatch(addRegistration(registration))
+    localStorage.setItem('registrations', JSON.stringify([...registrations, registration]))
+    setMessage('Registration successful.')
+  }
 
   return (
     <section className="event-details">
@@ -34,6 +62,16 @@ function EventDetailsPage() {
       <p><strong>Location:</strong> {venue?.city?.name || 'Not available'}, {venue?.country?.name || 'Not available'}</p>
       <p><strong>Category:</strong> {category || 'Not available'}</p>
       {event.info && <p><strong>Information:</strong> {event.info}</p>}
+
+      {currentUser ? (
+        <button type="button" onClick={handleRegistration} disabled={alreadyRegistered}>
+          {alreadyRegistered ? 'Already Registered' : 'Register for Event'}
+        </button>
+      ) : (
+        <p><Link to="/login">Login</Link> to register for this event.</p>
+      )}
+
+      {message && <p className="success-message">{message}</p>}
     </section>
   )
 }

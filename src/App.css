@@ -134,6 +134,11 @@ button {
   color: #c00000;
 }
 
+.success-message {
+  margin-top: 15px;
+  color: #167000;
+}
+
 @media (max-width: 600px) {
   header {
     flex-direction: column;

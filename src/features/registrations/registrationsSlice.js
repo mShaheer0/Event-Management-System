@@ -1,9 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
+const savedRegistrations = JSON.parse(localStorage.getItem('registrations')) || []
+
 const registrationsSlice = createSlice({
   name: 'registrations',
   initialState: {
-    items: [],
+    items: savedRegistrations,
   },
   reducers: {
     addRegistration: (state, action) => {
